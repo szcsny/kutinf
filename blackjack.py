@@ -40,11 +40,20 @@ for suit in suits:			#itt töltjük föl a cards listát az összes kártyával
 	for rank in ranks:
 		cards.append(Card(suit, rank))
 		
-
-print("WELCOME TO A GAME OF BLACKJACK!")
+money = 1000 #$
+		
+print("WELCOME TO A GAME OF BLACKJACK\nYou have 1000$ to start with")
 
 while game:
-
+	print("Balance:", money, "$")
+	bet = int(input("\nPlace your bet: ")) #tét
+	
+	if bet>money or bet<0:
+		break
+	
+	money -= bet
+	profit = 0
+	
 	playercards = []
 	dealercards = []
 	
@@ -73,6 +82,7 @@ while game:
 			print(playercards[1].text())
 			print("Total value:", playerval)
 			print("\nIt's a tie")
+			profit = bet
 			
 		player = False
 	
@@ -83,6 +93,7 @@ while game:
 		print("Total value:", playerval,"\n")
 		if playerval==21:
 			print("You win!")
+			profit = 2.5*bet
 			player = False
 		elif playerval>21:
 			aces = False
@@ -97,6 +108,7 @@ while game:
 		else:
 			if hits == 3:
 				print("You win!")
+				profit = 1.5*bet
 				player = False
 			nextmove = input("\nWhat do you want to do? (hit/stand)\n")
 			if nextmove == "hit":
@@ -131,15 +143,20 @@ while game:
 				dealerval -= 10
 			else:
 				print("Dealer's busted! You win!")
+				profit = 2*bet
 				dealer = False
 		else:
 			if dealerval > playerval:
 				print("Dealer wins")
 			elif dealerval == playerval:
 				print("It's a tie")
+				profit = bet
 			else:
 				print("You win!")
+				profit = 2*bet
 		break
+	
+	money += profit
 	
 	another = input("Do you want to play again? (yes/no)\n")
 	if another=="no":
